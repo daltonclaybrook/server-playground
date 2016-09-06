@@ -1,7 +1,9 @@
 package controller
 
 import (
+	// "encoding/json"
 	"fmt"
+	// "github.com/daltonclaybrook/web-app/model"
 	"net/http"
 )
 
@@ -9,22 +11,22 @@ import (
 type User struct{}
 
 // Routes describes all endpoints handled by the User Controller.
-func (user *User) Routes() []Route {
+func (uc *User) Routes() []Route {
 	return []Route{
 		Route{
 			"/user",
 			[]Handler{
-				Handler{"post", user.create},
-				Handler{"get", user.find},
+				Handler{"post", uc.create},
+				Handler{"get", uc.find},
 			},
 		},
 
 		Route{
 			"/user/",
 			[]Handler{
-				Handler{"get", user.findOne},
-				Handler{"patch", user.update},
-				Handler{"delete", user.delete},
+				Handler{"get", uc.findOne},
+				Handler{"patch", uc.update},
+				Handler{"delete", uc.delete},
 			},
 		},
 	}
@@ -34,22 +36,25 @@ func (user *User) Routes() []Route {
 Handlers
 */
 
-func (user *User) create(w http.ResponseWriter, r *http.Request) {
+func (uc *User) create(w http.ResponseWriter, r *http.Request) {
+	// var user *model.User
+	// json.Unmarshal()
+
 	fmt.Fprintln(w, "create")
 }
 
-func (user *User) find(w http.ResponseWriter, r *http.Request) {
+func (uc *User) find(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "find")
 }
 
-func (user *User) findOne(w http.ResponseWriter, r *http.Request) {
+func (uc *User) findOne(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "findOne")
 }
 
-func (user *User) update(w http.ResponseWriter, r *http.Request) {
+func (uc *User) update(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "update")
 }
 
-func (user *User) delete(w http.ResponseWriter, r *http.Request) {
+func (uc *User) delete(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "delete")
 }

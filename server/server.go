@@ -17,12 +17,10 @@ type WebServer struct {
 func (ws *WebServer) RegisterController(c controller.Controller) {
 
 	routes := c.Routes()
-	for i := 0; i < len(routes); i++ {
-		route := routes[i]
+	for _, route := range routes {
 		http.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
 			method := strings.ToLower(request.Method)
-			for j := 0; j < len(route.Handlers); j++ {
-				handler := route.Handlers[j]
+			for _, handler := range route.Handlers {
 				if strings.ToLower(handler.Method) == method {
 					handler.Handler(writer, request)
 					return
