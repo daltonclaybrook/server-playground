@@ -6,18 +6,25 @@ import (
 )
 
 const (
-	Create  = iota
-	Find    = iota
+	// Create a model.
+	Create = iota
+	// Find models.
+	Find = iota
+	// FindOne model.
 	FindOne = iota
-	Update  = iota
-	Delete  = iota
+	// Update a model.
+	Update = iota
+	// Delete a model.
+	Delete = iota
 )
 
+// CRUDRoute is used to express a typical CRUD operation.
 type CRUDRoute struct {
 	Op      int
 	Handler func(w http.ResponseWriter, r *http.Request)
 }
 
+// CRUDHandler defines a type which handles all CRUD methods.
 type CRUDHandler interface {
 	create(w http.ResponseWriter, r *http.Request)
 	find(w http.ResponseWriter, r *http.Request)
@@ -26,6 +33,7 @@ type CRUDHandler interface {
 	delete(w http.ResponseWriter, r *http.Request)
 }
 
+// AllRoutesFromHandler is a convenience method for subscribing to all routes.
 func AllRoutesFromHandler(model string, handler CRUDHandler) []Route {
 	crud := []CRUDRoute{
 		CRUDRoute{Create, handler.create},
@@ -37,6 +45,7 @@ func AllRoutesFromHandler(model string, handler CRUDHandler) []Route {
 	return RoutesFromCRUD(model, crud)
 }
 
+// RoutesFromCRUD transforms CRUDROutes to Routes expected by the server.
 func RoutesFromCRUD(model string, crud []CRUDRoute) []Route {
 
 	m := make(map[string]*Route)
