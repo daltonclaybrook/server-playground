@@ -19,6 +19,7 @@ func (ws *WebServer) RegisterController(c controller.Controller) {
 	if ws.router == nil {
 		ws.router = mux.NewRouter()
 		ws.router.HandleFunc("/", sendUnhandled)
+		http.Handle("/", ws.router)
 	}
 
 	routes := c.Routes()
@@ -28,8 +29,6 @@ func (ws *WebServer) RegisterController(c controller.Controller) {
 			ws.router.HandleFunc(route.Path, handler.Handler).Methods(handler.Method)
 		}
 	}
-
-	http.Handle("/", ws.router)
 }
 
 // Start starts the server.
