@@ -3,38 +3,39 @@ package server
 import (
 	"fmt"
 	"github.com/daltonclaybrook/web-app/controller"
+	"github.com/gorilla/mux"
 	"net/http"
-	"strings"
 	"time"
 )
 
 // WebServer is used to create and start a server.
 type WebServer struct {
 	server *http.Server
+	router *mux.Router
 }
 
 // RegisterController registers a request handler with the WebServer.
 func (ws *WebServer) RegisterController(c controller.Controller) {
+	if ws.router == nil {
+		ws.router = mux.NewRouter()
+		ws.router.HandleFunc("/", sendUnhandled)
+	}
 
 	routes := c.Routes()
 	for _, route := range routes {
-		http.HandleFunc(route.Path, func(writer http.ResponseWriter, request *http.Request) {
-			method := strings.ToLower(request.Method)
-			for _, handler := range route.Handlers {
-				if strings.ToLower(handler.Method) == method {
-					handler.Handler(writer, request)
-					return
-				}
-			}
-
-			sendUnhandled(writer, request)
-		})
+		for _, handler := range route.Handlers {
+			fmt.Printf("path: %v, method: %v\n", route.Path, handler.Method)
+			ws.router.HandleFunc(route.Path, handler.Handler).Methods(handler.Method)
+		}
 	}
+
+	http.Handle("/", ws.router)
 }
 
 // Start starts the server.
 func (ws *WebServer) Start() {
 	ws.setupServer()
+	fmt.Println("listening on localhost:8080")
 	ws.server.ListenAndServe()
 }
 

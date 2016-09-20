@@ -22,7 +22,7 @@ func (uc *User) Routes() []Route {
 		},
 
 		Route{
-			"/user/",
+			"/user/{id:[0-9]+}",
 			[]Handler{
 				Handler{"get", uc.findOne},
 				Handler{"patch", uc.update},
