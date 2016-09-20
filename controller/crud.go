@@ -18,6 +18,25 @@ type CRUDRoute struct {
 	Handler func(w http.ResponseWriter, r *http.Request)
 }
 
+type CRUDHandler interface {
+	create(w http.ResponseWriter, r *http.Request)
+	find(w http.ResponseWriter, r *http.Request)
+	findOne(w http.ResponseWriter, r *http.Request)
+	update(w http.ResponseWriter, r *http.Request)
+	delete(w http.ResponseWriter, r *http.Request)
+}
+
+func AllRoutesFromHandler(model string, handler CRUDHandler) []Route {
+	crud := []CRUDRoute{
+		CRUDRoute{Create, handler.create},
+		CRUDRoute{Find, handler.find},
+		CRUDRoute{FindOne, handler.findOne},
+		CRUDRoute{Update, handler.update},
+		CRUDRoute{Delete, handler.delete},
+	}
+	return RoutesFromCRUD(model, crud)
+}
+
 func RoutesFromCRUD(model string, crud []CRUDRoute) []Route {
 
 	m := make(map[string]*Route)

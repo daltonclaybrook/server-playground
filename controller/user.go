@@ -12,15 +12,7 @@ type User struct{}
 
 // Routes describes all endpoints handled by the User Controller.
 func (uc *User) Routes() []Route {
-	crud := []CRUDRoute{
-		CRUDRoute{Create, uc.create},
-		CRUDRoute{Find, uc.find},
-		CRUDRoute{FindOne, uc.findOne},
-		CRUDRoute{Update, uc.update},
-		CRUDRoute{Delete, uc.delete},
-	}
-
-	return RoutesFromCRUD("user", crud)
+	return AllRoutesFromHandler("user", uc)
 }
 
 /*
